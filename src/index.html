@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeStudio - Online HTML/CSS/JS Compiler</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ace Editor CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.7/ace.js"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#1E1E1E] text-gray-300 h-screen flex flex-col overflow-hidden">
+    <!-- Top Navigation Bar -->
+    <nav class="bg-[#333333] px-4 py-2 flex items-center justify-between border-b border-[#252525]">
+        <div class="flex items-center space-x-4">
+            <div class="font-bold text-white flex items-center">
+                <i class="fa-solid fa-code text-blue-500 mr-2"></i>
+                <span>CodeStudio</span>
+            </div>
+            <div class="hidden md:flex space-x-4">
+                <button class="hover:bg-[#3C3C3C] px-3 py-1 rounded">File</button>
+                <button class="hover:bg-[#3C3C3C] px-3 py-1 rounded">Edit</button>
+                <button class="hover:bg-[#3C3C3C] px-3 py-1 rounded">View</button>
+                <button class="hover:bg-[#3C3C3C] px-3 py-1 rounded">Run</button>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button id="run-btn" class="bg-green-600 hover:bg-green-700 px-4 py-1 rounded flex items-center transition-all duration-200">
+                <i class="fa-solid fa-play mr-2"></i> Run
+            </button>
+            <button id="save-btn" class="bg-blue-600 hover:bg-blue-700 px-4 py-1 rounded flex items-center transition-all duration-200">
+                <i class="fa-solid fa-save mr-2"></i> Save
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Left Sidebar -->
+        <div class="w-12 bg-[#252526] flex flex-col items-center py-4 border-r border-[#1E1E1E]">
+            <button class="w-8 h-8 mb-4 flex items-center justify-center text-white hover:bg-[#2D2D2D] rounded transition-all">
+                <i class="fa-solid fa-file-code"></i>
+            </button>
+            <button class="w-8 h-8 mb-4 flex items-center justify-center text-white hover:bg-[#2D2D2D] rounded transition-all">
+                <i class="fa-solid fa-search"></i>
+            </button>
+            <button class="w-8 h-8 mb-4 flex items-center justify-center text-white hover:bg-[#2D2D2D] rounded transition-all">
+                <i class="fa-solid fa-code-branch"></i>
+            </button>
+            <button class="w-8 h-8 mb-4 flex items-center justify-center text-white hover:bg-[#2D2D2D] rounded transition-all">
+                <i class="fa-solid fa-bug"></i>
+            </button>
+        </div>
+
+        <!-- File Explorer -->
+        <div class="w-64 bg-[#252526] hidden md:block border-r border-[#1E1E1E] overflow-y-auto">
+            <div class="p-3 text-sm font-semibold flex items-center justify-between">
+                <span>EXPLORER</span>
+                <i class="fa-solid fa-ellipsis"></i>
+            </div>
+            <div class="px-3 py-2 hover:bg-[#2D2D2D] cursor-pointer rounded mx-1 mb-1">
+                <div class="flex items-center">
+                    <i class="fa-solid fa-chevron-down mr-2 text-xs"></i>
+                    <span>PROJECT FILES</span>
+                </div>
+            </div>
+            <div class="ml-4">
+                <div class="px-2 py-1 hover:bg-[#2D2D2D] cursor-pointer rounded mx-1 mb-1 flex items-center">
+                    <i class="fa-brands fa-html5 text-orange-500 mr-2"></i>
+                    <span>index.html</span>
+                </div>
+                <div class="px-2 py-1 hover:bg-[#2D2D2D] cursor-pointer rounded mx-1 mb-1 flex items-center">
+                    <i class="fa-brands fa-css3-alt text-blue-500 mr-2"></i>
+                    <span>styles.css</span>
+                </div>
+                <div class="px-2 py-1 hover:bg-[#2D2D2D] cursor-pointer rounded mx-1 mb-1 flex items-center">
+                    <i class="fa-brands fa-js text-yellow-500 mr-2"></i>
+                    <span>script.js</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code Editor Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Editor Tabs -->
+            <div class="bg-[#2D2D2D] border-b border-[#1E1E1E] flex">
+                <div id="html-tab" class="bg-[#1E1E1E] px-4 py-2 flex items-center space-x-2 cursor-pointer border-r border-[#1E1E1E]">
+                    <i class="fa-brands fa-html5 text-orange-500"></i>
+                    <span>index.html</span>
+                </div>
+                <div id="css-tab" class="px-4 py-2 flex items-center space-x-2 cursor-pointer border-r border-[#1E1E1E]">
+                    <i class="fa-brands fa-css3-alt text-blue-500"></i>
+                    <span>styles.css</span>
+                </div>
+                <div id="js-tab" class="px-4 py-2 flex items-center space-x-2 cursor-pointer border-r border-[#1E1E1E]">
+                    <i class="fa-brands fa-js text-yellow-500"></i>
+                    <span>script.js</span>
+                </div>
+            </div>
+
+            <!-- Editor Area -->
+            <div class="flex-1 flex flex-col md:flex-row overflow-hidden">
+                <!-- Code Editor -->
+                <div class="flex-1 overflow-hidden">
+                    <div id="editor" class="h-full"></div>
+                </div>
+                
+                <!-- Preview Panel (Vertically on mobile, horizontally on desktop) -->
+                <div id="preview-panel" class="bg-white h-1/2 md:h-auto md:w-1/2 border-t md:border-t-0 md:border-l border-[#1E1E1E] flex flex-col">
+                    <div class="bg-[#2D2D2D] px-4 py-2 flex items-center justify-between border-b border-[#1E1E1E]">
+                        <span>Preview</span>
+                        <div>
+                            <button id="refresh-preview" class="hover:bg-[#3C3C3C] px-2 py-1 rounded">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                            <button id="toggle-panel" class="hover:bg-[#3C3C3C] px-2 py-1 rounded">
+                                <i class="fa-solid fa-arrows-left-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <iframe id="preview" class="flex-1 w-full bg-white"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Status Bar -->
+    <footer class="bg-[#007ACC] text-white px-4 py-1 flex justify-between items-center text-sm">
+        <div class="flex items-center space-x-4">
+            <span id="current-file">index.html</span>
+            <span id="editor-mode">HTML</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span id="cursor-position">Ln 1, Col 1</span>
+            <span>UTF-8</span>
+            <span id="auto-save-status">Auto-save: on</span>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
